@@ -1,0 +1,11 @@
+{
+  "host": "",
+  "dbURI": "",
+  "sessionSecret": "",
+  "fb": {
+    "clientID": "",
+    "clientSecret": "",
+    "callbackURL": "",
+    "profileFields": ["id", "displayName", "photos"]
+  }
+}

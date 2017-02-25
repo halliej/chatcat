@@ -1,0 +1,32 @@
+'use strict';
+const router = require('express').Router();
+
+const _registerRoutes = (routes, method) => {
+  /* eslint-disable no-restricted-syntax */
+  for (const key in routes) {
+    if (typeof routes[key] === 'object' &&
+        routes[key] !== null &&
+        !(routes[key] instanceof Array)) {
+      _registerRoutes(routes[key], key);
+    } else {
+      if (method === 'get') {
+        router.get(key, routes[key]);
+      } else if (method === 'post') {
+        router.post(key, routes[key]);
+      } else {
+        router.use(routes[key]);
+      }
+      console.log('register', key);
+    }
+  }
+  /* eslint-enable no-restricted-syntax */
+};
+
+const route = routes => {
+  _registerRoutes(routes);
+  return router;
+};
+
+module.exports = {
+  route
+};
