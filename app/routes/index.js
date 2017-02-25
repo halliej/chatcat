@@ -1,4 +1,5 @@
 'use strict';
+const passport = require('passport');
 const h = require('../helpers');
 
 module.exports = () => {
@@ -8,11 +9,18 @@ module.exports = () => {
         res.render('login');
       },
       '/rooms': (req, res) => {
-        res.render('rooms');
+        res.render('rooms', {
+          user: req.user
+        });
       },
       '/chat': (req, res) => {
         res.render('chatroom');
-      }
+      },
+      '/auth/facebook': passport.authenticate('facebook'),
+      '/auth/facebook/callback': passport.authenticate('facebook', {
+        successRedirect: '/rooms',
+        failureRedirect: '/'
+      })
     },
     post: {
 

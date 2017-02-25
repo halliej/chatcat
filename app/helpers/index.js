@@ -1,6 +1,8 @@
 'use strict';
 const router = require('express').Router();
 
+const db = require('../db');
+
 const _registerRoutes = (routes, method) => {
   /* eslint-disable no-restricted-syntax */
   for (const key in routes) {
@@ -27,6 +29,45 @@ const route = routes => {
   return router;
 };
 
+const findOne = profileID => {
+  return db.userModel.findOne({
+    profileId: profileID
+  });
+};
+
+const createNewUser = profile => {
+  return new Promise((resolve, reject) => {
+    const newChatUser = new db.userModel({
+      profileId: profile.id,
+      fullName: profile.displayName,
+      profilePic: profile.photos[0].value || ''
+    });
+
+    newChatUser.save(error => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(newChatUser);
+      }
+    });
+  });
+};
+
+const findById = id => {
+  return new Promise((resolve, reject) => {
+    db.userModel.findById(id, (error, user) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(user);
+      }
+    });
+  });
+};
+
 module.exports = {
-  route
+  route,
+  findOne,
+  createNewUser,
+  findById
 };
