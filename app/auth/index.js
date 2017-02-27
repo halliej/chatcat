@@ -1,6 +1,7 @@
 'use strict';
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
 
 const config = require('../config');
 const h = require('../helpers');
@@ -30,4 +31,5 @@ const authProcessor = (accessToken, refreshToken, profile, done) => {
 
 module.exports = () => {
   passport.use(new FacebookStrategy(config.fb, authProcessor));
+  passport.use(new TwitterStrategy(config.twitter, authProcessor));
 };
