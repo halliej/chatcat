@@ -1,6 +1,7 @@
 'use strict';
 const passport = require('passport');
 const h = require('../helpers');
+const config = require('../config');
 
 module.exports = () => {
   const routes = {
@@ -10,12 +11,14 @@ module.exports = () => {
       },
       '/rooms': [h.isAuthenticated, (req, res) => {
         res.render('rooms', {
-          user: req.user
+          user: req.user,
+          host: config.host
         });
       }],
       '/chat': [h.isAuthenticated, (req, res) => {
         res.render('chatroom', {
-          user: req.user
+          user: req.user,
+          host: config.host
         });
       }],
       '/auth/facebook': passport.authenticate('facebook'),
