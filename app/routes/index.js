@@ -15,10 +15,16 @@ module.exports = () => {
           host: config.host
         });
       }],
-      '/chat': [h.isAuthenticated, (req, res) => {
+      '/chat/:id': [h.isAuthenticated, (req, res, next) => {
+        const getRoom = h.findRoomById(req.app.locals.chatrooms, req.params.id);
+        if (getRoom === undefined) {
+          return next();
+        }
         res.render('chatroom', {
           user: req.user,
-          host: config.host
+          host: config.host,
+          room: getRoom.room,
+          roomID: getRoom.roomID
         });
       }],
       '/auth/facebook': passport.authenticate('facebook'),
