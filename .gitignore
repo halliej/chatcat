@@ -22,3 +22,5 @@ npm-debug.log
 
 # Configuration file
 app/config/development.json
+
+dump.rdb

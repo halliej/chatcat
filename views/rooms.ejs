@@ -9,7 +9,9 @@
 	<script>
 		'use strict';
 		$(() => {
-			const socket = io('<%= host %>' + '/roomslist');
+			const socket = io('<%= host %>' + '/roomslist', {
+				transports: ['websocket']
+			});
 			const newRoomInput = $("input[name='roomName']");
 			const renderChatrooms = chatrooms => {
 				const roomsListDiv = $('#roomsListUL');
