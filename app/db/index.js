@@ -1,12 +1,13 @@
 'use strict';
 
 const config = require('../config');
+const logger = require('../logger');
 const Mongoose = require('mongoose').connect(config.dbURI);
 
 Mongoose.Promise = global.Promise;
 
 Mongoose.connection.on('error', error => {
-  console.log('MongoDB error:', error);
+  logger.log('error', `MongoDB connection error: ${error}`);
 });
 
 const chatUser = new Mongoose.Schema({
