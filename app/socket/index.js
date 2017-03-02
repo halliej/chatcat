@@ -25,8 +25,17 @@ module.exports = (io, app) => {
   io.of('/chatter').on('connection', socket => {
     socket.on('join', data => {
       const usersList = h.addUserToRoom(allrooms, data, socket);
-      socket.broadcast.to(data.roomID).emit('updateUsersList', JSON.stringify(usersList.users));
-      socket.emit('updateUsersList', JSON.stringify(usersList.users));
+      if (usersList !== undefined) {
+        socket.broadcast.to(data.roomID).emit('updateUsersList', JSON.stringify(usersList.users));
+        socket.emit('updateUsersList', JSON.stringify(usersList.users));
+      }
+    });
+
+    socket.on('disconnect', () => {
+      const room = h.removeUserFromRoom(allrooms, socket);
+      if (room !== undefined) {
+        socket.broadcast.to(room.roomID).emit('updateUsersList', JSON.stringify(room.users));
+      }
     });
   });
 };
