@@ -13,12 +13,30 @@
 			const roomID = '<%= roomID %>';
 			const user = '<%= user.fullName %>';
 			const userPic = '<%= user.profilePic %>';
+			const chatUsers = $('.chatUsers');
+
 			socket.on('connect', () => {
 				socket.emit('join', {
 					roomID,
 					user,
 					userPic
 				});
+			});
+
+			const userList = user => {
+				return `<div class="userBlock">
+					<div class="userPic"><img src="${user.userPic}" alt="${user.user}"></div>
+					<div class="cuserName">${user.user}</div>
+				</div>`;
+			};
+
+			socket.on('updateUsersList', data => {
+				const parsedData = JSON.parse(data);
+				let usersDataList = '';
+				for(let user of parsedData) {
+					usersDataList += userList(user);
+				}
+				chatUsers.html('').html(usersDataList);
 			});
 		});
 	</script>
