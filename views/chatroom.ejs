@@ -14,6 +14,8 @@
 			const user = '<%= user.fullName %>';
 			const userPic = '<%= user.profilePic %>';
 			const chatUsers = $('.chatUsers');
+			const chatInput = $('input[name="userInput"]');
+			const chatMessagesDiv = $('.chatMessages');
 
 			socket.on('connect', () => {
 				socket.emit('join', {
@@ -38,6 +40,35 @@
 				}
 				chatUsers.html('').html(usersDataList);
 			});
+
+			const updateFeed = (userPic, message) => {
+				const template = `<div class="chatBlock">
+														<div class="userPic"><img src="${userPic}"></div>
+														<div class="chatMsg">${message}</div>
+													</div>`;
+				$(template).hide().prependTo(chatMessagesDiv).slideDown(200);
+			}
+
+			chatInput.on('keyup', function(evt) {
+				evt.preventDefault();
+				const messageFld = $(this);
+				if(evt.which === 13 && messageFld.val() !== '') {
+					socket.emit('newMessage', {
+						roomID,
+						user,
+						userPic,
+						message: messageFld.val()
+					});
+					updateFeed(userPic, messageFld.val());
+					messageFld.val('');
+				}
+			});
+
+			socket.on('inMessage', data => {
+				const parsedData = JSON.parse(data);
+				updateFeed(parsedData.userPic, parsedData.message);
+			});
+
 		});
 	</script>
 </head>
@@ -56,10 +87,7 @@
 			<div class="chatMessagesPanel">
 				<div class="chatMessages">
 				<!-- Loop this for chat messages -->
-				<div class="chatBlock">
-					<div class="userPic"><img src="/img/user.jpg"></div>
-					<div class="chatMsg">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti perferendis eius aut nesciunt necessitatibus ad nulla, qui sequi, id nam. Possimus odit aut nisi veritatis amet distinctio id officiis ipsam!</div>
-				</div>
+
 				<!-- loop end -->
 				</div>
 				<div class="typePanel">
