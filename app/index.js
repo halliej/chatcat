@@ -12,7 +12,7 @@ const ioServer = app => {
   app.locals.chatrooms = [];
   const server = require('http').Server(app);
   const io = require('socket.io')(server);
-  
+
   io.set('transports', ['websocket']);
 
   const pubClient = redis(config.redis.port, config.redis.host, {
@@ -42,5 +42,6 @@ const ioServer = app => {
 module.exports = {
   router: require('./routes')(),
   session: require('./session'),
-  ioServer
+  ioServer,
+  logger: require('./logger')
 };
